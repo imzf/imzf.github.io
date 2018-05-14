@@ -67,7 +67,9 @@
 
 
 **rr同步的代码大概有26GB左右，如果你的网速较慢，可能会同步失败，如果失败就再次执行  repo sync -f --force-sync** 
+
 把适合你机型的device vendor kernel，放到对应的目录（device vendor kernel你也可以向你的rom开发者索要或者自己去github寻找）
+
 示例路径
 
      ~/rr/device/xiaomi/santoni
@@ -87,6 +89,7 @@
      out/host/linux-x86/bin/jack-admin kill-server
      out/host/linux-x86/bin/jack-admin start-server
 **可选项**（根据你的需要，决定是否使用这些变量）
+
 设定缓存加快编译
 
     export USE_CCACHE=1
@@ -174,9 +177,11 @@ chmod a+x ~/bin/repo
 <pre><code>repo sync -f --force-sync --no-clone-bundle
 </code></pre>
 
-<p><strong>rr同步的代码大概有26GB左右，如果你的网速较慢，可能会同步失败，如果失败就再次执行  repo sync -f --force-sync</strong> 
-把适合你机型的device vendor kernel，放到对应的目录（device vendor kernel你也可以向你的rom开发者索要或者自己去github寻找）
-示例路径</p>
+<p><strong>rr同步的代码大概有26GB左右，如果你的网速较慢，可能会同步失败，如果失败就再次执行  repo sync -f --force-sync</strong> </p>
+
+<p>把适合你机型的device vendor kernel，放到对应的目录（device vendor kernel你也可以向你的rom开发者索要或者自己去github寻找）</p>
+
+<p>示例路径</p>
 
 <pre><code> ~/rr/device/xiaomi/santoni
 ~/rr/vendor/xiaomi/santoni
@@ -200,8 +205,9 @@ chmod a+x ~/bin/repo
  out/host/linux-x86/bin/jack-admin start-server
 </code></pre>
 
-<p><strong>可选项</strong>（根据你的需要，决定是否使用这些变量）
-设定缓存加快编译</p>
+<p><strong>可选项</strong>（根据你的需要，决定是否使用这些变量）</p>
+
+<p>设定缓存加快编译</p>
 
 <pre><code>export USE_CCACHE=1
 prebuilts/misc/linux-x86/ccache/ccache -M 50G
