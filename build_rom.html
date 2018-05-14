@@ -1,0 +1,300 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Simple</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+现在编译rom的中文教程，说实话，对新手友好的真的很少。如果你对编译rom有兴趣，那么这篇文章一定可以帮到你，它会帮助你少走很多弯路。
+
+
+----------
+## 安装依赖 ##
+这里以ubuntu为例
+
+    sudo apt-get update && sudo apt-get install git-core gnupg flex bison gperf libsdl1.2-dev libesd0-dev libwxgtk3.0-dev squashfs-tools build-essential zip curl libncurses5-dev zlib1g-dev openjdk-8-jre openjdk-8-jdk pngcrush schedtool libxml2 libxml2-utils xsltproc lzop libc6-dev schedtool g++-multilib lib32z1-dev lib32ncurses5-dev gcc-multilib maven tmux screen w3m ncftp liblz4-tool pngquant rsync openjdk-8-jdk
+## 设置repo ##
+
+     mkdir ~/bin
+     PATH=~/bin:$PATH
+**使用Git Repo 镜像**
+
+    curl https://mirrors.tuna.tsinghua.edu.cn/git/git-repo > ~/bin/repo
+    chmod a+x ~/bin/repo
+**repo的运行过程中会尝试访问官方的git源更新自己，如果想使用tuna的镜像源进行更新，可以将如下内容复制到你的~/.bashrc里**
+
+    export REPO_URL='https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/'
+## 建立你的rom编译目录以及同步代码 ##
+目录的名称随意，不过建议使用和rom名称相近的目录名
+
+    mkdir ~/rr && cd ~/rr
+**每个rom的源都是不一样的，请参考你所要编译的rom的帮助文档，这里以rr为例**
+
+    repo init -u https://github.com/ResurrectionRemix/platform_manifest.git -b oreo
+**使用清华源代码镜像**
+打开.repo/manifest.xml，将
+
+      <remote  name="aosp"
+           fetch="https://android.googlesource.com"
+
+改成
+
+      <remote  name="aosp"
+           fetch="https://aosp.tuna.tsinghua.edu.cn"
+**开始同步**
+
+    repo sync -f --force-sync --no-clone-bundle
+
+
+**rr同步的代码大概有26GB左右，如果你的网速较慢，可能会同步失败，如果失败就再次执行  repo sync -f --force-sync** 
+把适合你机型的device vendor kernel，放到对应的目录（device vendor kernel你也可以向你的rom开发者索要或者自己去github寻找）
+示例路径
+
+     ~/rr/device/xiaomi/santoni
+    ~/rr/vendor/xiaomi/santoni
+    ~/rr/kernel/xiaomi/msm8937
+有些开发者device只有lineage的tree，当编译某些rom时需要做一些修改。rr的话可以参考我的提交https://github.com/imzf/android_device_xiaomi_santoni/commit/8b739be8603d8c747f9a54b003f998874a3ae2b2 
+https://github.com/imzf/android_device_xiaomi_santoni/commit/f31dc57075621e96f860ba11feee9b60168641f1
+**修改JACK默认使用的内存大小**
+
+    export JACK_SERVER_VM_ARGUMENTS="-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx4596m"
+如果编译出错，执行下面的命令，然后继续编译
+
+     out/host/linux-x86/bin/jack-admin kill-server
+     out/host/linux-x86/bin/jack-admin start-server
+**可选项**（根据你的需要，决定是否使用这些变量）
+设定缓存加快编译
+
+    export USE_CCACHE=1
+    prebuilts/misc/linux-x86/ccache/ccache -M 50G
+开启root（仅在基于los的rom上适用）
+
+    export WITH_SU=true
+禁用ninja
+
+    export USE_NINJA=false
+**开始编译**
+
+     . build/envsetup.sh
+    brunch santoni
+santoni是我的手机的代号，搞成你自己的手机代号
+编译完成的话，它会告诉你刷机包的存放位置
+**本文参考以下文章**
+----------
+[https://mirrors.tuna.tsinghua.edu.cn/help/lineageOS/](https://mirrors.tuna.tsinghua.edu.cn/help/lineageOS/ "https://mirrors.tuna.tsinghua.edu.cn/help/lineageOS/")
+----------
+[https://mirrors.tuna.tsinghua.edu.cn/help/git-repo/](https://mirrors.tuna.tsinghua.edu.cn/help/git-repo/ "https://mirrors.tuna.tsinghua.edu.cn/help/git-repo/")
+----------
+[记录下编译LineageOS的过程](https://www.isthnew.com/archives/build-lineageos.html "记录下编译LineageOS的过程")
+----------
+[https://github.com/ResurrectionRemix/platform_manifest](https://github.com/ResurrectionRemix/platform_manifest "https://github.com/ResurrectionRemix/platform_manifest")
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<p>现在编译rom的中文教程，说实话，对新手友好的真的很少。如果你对编译rom有兴趣，那么这篇文章一定可以帮到你，它会帮助你少走很多弯路。</p>
+
+<hr>
+
+<h2 id="">安装依赖</h2>
+
+<p>这里以ubuntu为例</p>
+
+<pre><code>sudo apt-get update &amp;&amp; sudo apt-get install git-core gnupg flex bison gperf libsdl1.2-dev libesd0-dev libwxgtk3.0-dev squashfs-tools build-essential zip curl libncurses5-dev zlib1g-dev openjdk-8-jre openjdk-8-jdk pngcrush schedtool libxml2 libxml2-utils xsltproc lzop libc6-dev schedtool g++-multilib lib32z1-dev lib32ncurses5-dev gcc-multilib maven tmux screen w3m ncftp liblz4-tool pngquant rsync openjdk-8-jdk
+</code></pre>
+
+<h2 id="repo">设置repo</h2>
+
+<pre><code> mkdir ~/bin
+ PATH=~/bin:$PATH
+</code></pre>
+
+<p><strong>使用Git Repo 镜像</strong></p>
+
+<pre><code>curl https://mirrors.tuna.tsinghua.edu.cn/git/git-repo &gt; ~/bin/repo
+chmod a+x ~/bin/repo
+</code></pre>
+
+<p><strong>repo的运行过程中会尝试访问官方的git源更新自己，如果想使用tuna的镜像源进行更新，可以将如下内容复制到你的~/.bashrc里</strong></p>
+
+<pre><code>export REPO_URL='https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/'
+</code></pre>
+
+<h2 id="rom">建立你的rom编译目录以及同步代码</h2>
+
+<p>目录的名称随意，不过建议使用和rom名称相近的目录名</p>
+
+<pre><code>mkdir ~/rr &amp;&amp; cd ~/rr
+</code></pre>
+
+<p><strong>每个rom的源都是不一样的，请参考你所要编译的rom的帮助文档，这里以rr为例</strong></p>
+
+<pre><code>repo init -u https://github.com/ResurrectionRemix/platform_manifest.git -b oreo
+</code></pre>
+
+<p><strong>使用清华源代码镜像</strong>
+打开.repo/manifest.xml，将</p>
+
+<pre><code>  &lt;remote  name="aosp"
+       fetch="https://android.googlesource.com"
+</code></pre>
+
+<p>改成</p>
+
+<pre><code>  &lt;remote  name="aosp"
+       fetch="https://aosp.tuna.tsinghua.edu.cn"
+</code></pre>
+
+<p><strong>开始同步</strong></p>
+
+<pre><code>repo sync -f --force-sync --no-clone-bundle
+</code></pre>
+
+<p><strong>rr同步的代码大概有26GB左右，如果你的网速较慢，可能会同步失败，如果失败就再次执行  repo sync -f --force-sync</strong> 
+把适合你机型的device vendor kernel，放到对应的目录（device vendor kernel你也可以向你的rom开发者索要或者自己去github寻找）
+示例路径</p>
+
+<pre><code> ~/rr/device/xiaomi/santoni
+~/rr/vendor/xiaomi/santoni
+~/rr/kernel/xiaomi/msm8937
+</code></pre>
+
+<p>有些开发者device只有lineage的tree，当编译某些rom时需要做一些修改。rr的话可以参考我的提交https://github.com/imzf/android<em>device</em>xiaomi<em>santoni/commit/8b739be8603d8c747f9a54b003f998874a3ae2b2 
+https://github.com/imzf/android</em>device<em>xiaomi</em>santoni/commit/f31dc57075621e96f860ba11feee9b60168641f1
+<strong>修改JACK默认使用的内存大小</strong></p>
+
+<pre><code>export JACK_SERVER_VM_ARGUMENTS="-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx4596m"
+</code></pre>
+
+<p>如果编译出错，执行下面的命令，然后继续编译</p>
+
+<pre><code> out/host/linux-x86/bin/jack-admin kill-server
+ out/host/linux-x86/bin/jack-admin start-server
+</code></pre>
+
+<p><strong>可选项</strong>（根据你的需要，决定是否使用这些变量）
+设定缓存加快编译</p>
+
+<pre><code>export USE_CCACHE=1
+prebuilts/misc/linux-x86/ccache/ccache -M 50G
+</code></pre>
+
+<p>开启root（仅在基于los的rom上适用）</p>
+
+<pre><code>export WITH_SU=true
+</code></pre>
+
+<p>禁用ninja</p>
+
+<pre><code>export USE_NINJA=false
+</code></pre>
+
+<p><strong>开始编译</strong></p>
+
+<pre><code> . build/envsetup.sh
+brunch santoni
+</code></pre>
+
+<p>santoni是我的手机的代号，搞成你自己的手机代号
+编译完成的话，它会告诉你刷机包的存放位置</p>
+
+<h2 id=""><strong>本文参考以下文章</strong></h2>
+
+<h2 id="httpsmirrorstunatsinghuaeducnhelplineageoshttpsmirrorstunatsinghuaeducnhelplineageoshttpsmirrorstunatsinghuaeducnhelplineageos"><a href="https://mirrors.tuna.tsinghua.edu.cn/help/lineageOS/" title="https://mirrors.tuna.tsinghua.edu.cn/help/lineageOS/">https://mirrors.tuna.tsinghua.edu.cn/help/lineageOS/</a></h2>
+
+<h2 id="httpsmirrorstunatsinghuaeducnhelpgitrepohttpsmirrorstunatsinghuaeducnhelpgitrepohttpsmirrorstunatsinghuaeducnhelpgitrepo"><a href="https://mirrors.tuna.tsinghua.edu.cn/help/git-repo/" title="https://mirrors.tuna.tsinghua.edu.cn/help/git-repo/">https://mirrors.tuna.tsinghua.edu.cn/help/git-repo/</a></h2>
+
+<h2 id="lineageoshttpswwwisthnewcomarchivesbuildlineageoshtmllineageos"><a href="https://www.isthnew.com/archives/build-lineageos.html" title="记录下编译LineageOS的过程">记录下编译LineageOS的过程</a></h2>
+
+<p><a href="https://github.com/ResurrectionRemix/platform_manifest" title="https://github.com/ResurrectionRemix/platform_manifest">https://github.com/ResurrectionRemix/platform_manifest</a></p>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>© Copyright 2014 by isnowfy, Designed by isnowfy</p>
+	</div>
+</div>
+<script src="main.js"></script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "build_rom.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+</body>
+</html>
